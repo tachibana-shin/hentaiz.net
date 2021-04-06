@@ -102,17 +102,24 @@
                   :key="index"
                   class="pa-0 ma-0"
                 >
-                  <v-list-item
-                    class="text-center pa-0 ma-0"
-                    style="min-height: 35px"
-                    :to="item.href"
-                  >
-                    <v-list-item-content class="pa-0 ma-0">
-                      <v-list-item-subtitle class="pa-0 ma-0">
-                        {{ item.text }}
-                      </v-list-item-subtitle>
-                    </v-list-item-content>
-                  </v-list-item>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-list-item
+                        class="text-center pa-0 ma-0"
+                        style="min-height: 35px"
+                        :to="item.href"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-list-item-content class="pa-0 ma-0">
+                          <v-list-item-subtitle class="pa-0 ma-0">
+                            {{ item.text }}
+                          </v-list-item-subtitle>
+                        </v-list-item-content>
+                      </v-list-item>
+                    </template>
+                    <span> {{ item.tooltip }} </span>
+                  </v-tooltip>
                 </v-col>
               </v-row>
             </v-card>

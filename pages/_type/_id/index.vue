@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="12">
       <app-section-grid :hentais="blocks" :title="title">
-        <template v-slot:actions>
+        <template v-slot:after>
           <v-select
             :items="items"
             v-model="sortBy"
@@ -13,7 +13,6 @@
             small
             width="50"
             rounded
-            tile
             item-text="label"
             item-value="value"
             :style="{
@@ -169,7 +168,7 @@ export default {
         {
           params: {
             sort: this.$route.query.sort || "view",
-            page: ~(this.blocks.length / this.countPage)
+            page: 1 || ~(this.blocks.length / this.countPage)
           }
         }
       );

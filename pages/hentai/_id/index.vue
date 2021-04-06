@@ -140,16 +140,16 @@
 
     <v-col cols="12">
       <h3 class="text-h6 mb-3 font-weight-medium">Bình luận</h3>
-      <div
-        class="fb-comments"
-        :style="{
-          'background-color': '#ffffff'
-        }"
-        width="100%"
-        data-href="https://developers.facebook.com/docs/plugins/comments#configurator"
-        data-width=""
-        data-numposts="10"
-      ></div>
+      <div style="width: 100%; background-color: #ffffff">
+        <div
+          class="fb-comments"
+          width="100%"
+          data-lazy="true" data-colorscheme="dark" 
+          :data-href="`${process.env.BASE_URL}/${$route.params.id}`"
+          data-width=""
+          data-numposts="10"
+        ></div>
+      </div>
     </v-col>
 
     <v-col cols="12">
@@ -191,7 +191,8 @@ export default {
   data() {
     return {
       indexServerNow: 0,
-      snackbar: null
+      snackbar: null,
+      process
     };
   },
   head() {
@@ -279,7 +280,7 @@ export default {
           name,
           description,
           information,
-          servers,
+          servers = [],
           chapters,
           haveYouLike,
           nameJapan

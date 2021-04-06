@@ -3,17 +3,32 @@
     <v-col cols="12">
       <app-banner :items="swiper" v-if="swiper.length > 0"></app-banner>
 
-      <app-section-grid :hentais="hentaiNew" title="Mới nhất">
-        <template v-slot:actions>
-          <v-btn text to="/top-hentai">
-            Xem thêm
-          </v-btn>
-        </template>
-      </app-section-grid>
+      <app-section-grid
+        :hentais.sync="hentaiNew"
+        title="Mới nhất"
+        to="/top-hentai"
+        axios="/special/top-hentai"
+        mt-sm="1"
+      />
       <app-section-grid :hentais="hentaiTopWeek" title="Hentai top tuần" />
-      <app-section-grid :hentais="hentaiCommingSoon" title="Sắp chiếu" />
-      <app-section-grid :hentais="hentaiNoCover" title="Không che" />
-      <app-section-grid :hentais="hentaiFinish" title="Hoàn thành" />
+      <app-section-grid
+        :hentais="hentaiCommingSoon"
+        title="Sắp chiếu"
+        to="/trailer-hentai"
+        axios="/special/trailer-hentai"
+      />
+      <app-section-grid
+        :hentais.sync="hentaiNoCover"
+        title="Không che"
+        to="/hentai-uncensored"
+        axios="/special/hentai-uncensored"
+      />
+      <app-section-grid
+        :hentais.sync="hentaiFinish"
+        title="Hoàn thành"
+        to="/completed-hentai"
+        axios="/special/completed-hentai"
+      />
     </v-col>
   </v-row>
 </template>

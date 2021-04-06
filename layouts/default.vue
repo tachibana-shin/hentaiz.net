@@ -7,15 +7,18 @@
         <nuxt />
       </v-container>
     </v-main>
+    <app-footer />
   </v-app>
 </template>
 
 <script>
 import AppNavbar from "@/components/AppNavbar";
+import AppFooter from "@/components/AppFooter";
 
 export default {
   components: {
-    AppNavbar
+    AppNavbar,
+    AppFooter
   },
   data() {
     return {
