@@ -1,6 +1,6 @@
 <template>
   <v-footer padless>
-    <v-card flat tile class="text-center">
+    <v-card flat tile class="text-center" width="100%">
       <v-card-text>
         <v-btn
           v-for="({ icon, href }, index) in icons"

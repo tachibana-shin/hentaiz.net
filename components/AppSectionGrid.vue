@@ -42,7 +42,7 @@
             <v-chip
               rounded
               small
-              color="pink"
+              color="success"
               absolute
               top
               left
