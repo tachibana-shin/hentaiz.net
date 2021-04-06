@@ -27,7 +27,24 @@ export default {
     },
     meta: [
       { charset: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" }
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      {
+        name: "google-site-verification",
+        content: "5jNpT323wrrczYxA70CqBKOgbI81R2V3M4LUi6cP-E8"
+      }
+    ],
+    script: [
+      {
+        src: "https://www.googletagmanager.com/gtag/js?id=G-8R0ER79CFB",
+        async: true
+      },
+      {
+        innerHTML: `window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-8R0ER79CFB');`
+      }
     ]
   },
 
