@@ -1,4 +1,5 @@
 import colors from "vuetify/es5/util/colors";
+import axios from "axios";
 
 export default {
   loading: {
@@ -45,6 +46,13 @@ export default {
     
       gtag('config', 'G-8R0ER79CFB');`
       }
+    ],
+    link: [
+      {
+        rel: "icon",
+        type: "image/png",
+        href: `${process.env.BASE_URL}/favicon.png`
+      }
     ]
   },
 
@@ -52,7 +60,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: ["~/plugins/vuetify-cache.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -75,16 +83,44 @@ export default {
     ],
 
     "@nuxtjs/robots",
-    "@luxdamore/nuxt-prune-html"
+    "@luxdamore/nuxt-prune-html",
+    "@nuxtjs/sitemap"
   ],
+
+  axios: {
+    baseURL: process.env.API_URL
+  },
+
+  async sitemap() {
+    const { data } = await axios.get(`${process.env.API_URL}/sitemap`);
+    const sitemaps = data.map(item => {
+      return {
+        path: `${item.loc}.xml`,
+        routes: item.children.map(item => {
+          return {
+            url: `${process.env.BASE_URL}${item.loc}`,
+            lastmod: item.lastmod
+          };
+        })
+      };
+    });
+
+
+    console.log( sitemaps );
+
+    return {
+      hostname: process.env.BASE_URL,
+      gzip: true,
+      path: "/sitemap.xml",
+      exclude: ["/history", "/favorite"],
+      sitemaps
+    };
+  },
 
   robots: {
     UserAgent: "*"
   },
 
-  axios: {
-    baseURL: process.env.API_URL
-  },
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ["~/assets/variables.scss"],

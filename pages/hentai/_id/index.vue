@@ -144,7 +144,8 @@
         <div
           class="fb-comments"
           width="100%"
-          data-lazy="true" data-colorscheme="dark" 
+          data-lazy="true"
+          data-colorscheme="dark"
           :data-href="`${process.env.BASE_URL}/${$route.params.id}`"
           data-width=""
           data-numposts="10"
@@ -306,9 +307,8 @@ export default {
             ? description.slice(0, 317) + "..."
             : description
       };
-    } catch ({ response }) {
-      console.log(response);
-      error(response);
+    } catch (err) {
+      error({});
     }
   },
   watch: {

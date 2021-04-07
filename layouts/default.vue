@@ -131,12 +131,6 @@ export default {
           rel: "canonical",
           hid: "canonical",
           href: `${process.env.BASE_URL}`
-        },
-        {
-          rel: "shorcut icon",
-          hid: "shorcut-icon",
-          type: "image/png",
-          href: `${process.env.BASE_URL}/favicon.png`
         }
       ],
       script: [

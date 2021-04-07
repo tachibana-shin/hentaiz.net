@@ -20,13 +20,13 @@
       v-for="({ pratical, href, image, title }, index) in items"
       :key="index"
     >
-      <router-link :to="href">
+      <nuxt-link :to="href">
         <img :src="image" />
         <div class="information">
           <h2>{{ title }}</h2>
           <h3>{{ pratical }}</h3>
         </div>
-      </router-link>
+      </nuxt-link>
     </swiper-slide>
     <div class="pagination" slot="pagination"></div>
   </swiper>
