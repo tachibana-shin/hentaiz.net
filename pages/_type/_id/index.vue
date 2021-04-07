@@ -91,7 +91,7 @@ export default {
           });
         } else {
           this.$router.push({
-            path: `/${id}/page-${value}`,
+            path: `/${type}/page-${value}`,
             query: this.$route.query
           });
         }
