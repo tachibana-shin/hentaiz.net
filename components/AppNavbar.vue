@@ -167,7 +167,7 @@
         hide-selected
         label="Search"
         append-icon=""
-        @keypress.enter="$router.push(`/search?query=${search}`)"
+        @keyup.enter="$router.push(`/search?query=${search}`)"
         clearable
       >
         <template v-slot:itdem="{ item, attrs }">

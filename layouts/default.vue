@@ -1,15 +1,5 @@
 <template>
   <v-app dark>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript
-      ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-PZQGBS2"
-        height="0"
-        width="0"
-        style="display:none;visibility:hidden"
-      ></iframe
-    ></noscript>
-    <!-- End Google Tag Manager (noscript) -->
     <div id="fb-root"></div>
     <app-navbar :menu="menu" />
     <v-main>
@@ -133,6 +123,8 @@ export default {
           href: `${process.env.BASE_URL}`
         }
       ],
+      
+      __dangerouslyDisableSanitizers: ["script"],
       script: [
         {
           src:

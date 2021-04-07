@@ -20,17 +20,15 @@
             }"
           ></v-select>
         </template>
-        <client-only>
-          <vue-infinite-loading
-            @infinite="fetch"
-            class="mt-2"
-            ref="infiniteLoading"
-          >
-            <template v-slot:spinner>
-              <v-progress-circular indeterminate small color="inherit" />
-            </template>
-          </vue-infinite-loading>
-        </client-only>
+
+        <div class="text-center mt-5">
+          <v-pagination
+            v-model="page"
+            :length="maxPage"
+            circle
+            :total-visible="7"
+          />
+        </div>
       </app-section-grid>
     </v-col>
   </v-row>
@@ -38,7 +36,6 @@
 
 <script>
 import AppSectionGrid from "@/components/AppSectionGrid";
-import VueInfiniteLoading from "vue-infinite-loading";
 
 function getPath(type, id) {
   if (id) {
@@ -49,9 +46,10 @@ function getPath(type, id) {
 }
 
 export default {
+  scrollToTop: true,
+  watchQuery: ["sort"],
   components: {
-    AppSectionGrid,
-    VueInfiniteLoading
+    AppSectionGrid
   },
   data() {
     return {
@@ -75,6 +73,28 @@ export default {
             sort: value
           }
         });
+      }
+    },
+    page: {
+      get() {
+        return Math.max(this.$route.params.page || 1, 1);
+      },
+      set(value) {
+        const {
+          params: { type, id }
+        } = this.$route;
+
+        if (id) {
+          this.$router.push({
+            path: `/${type}/${id}/page-${value}`,
+            query: this.$route.query
+          });
+        } else {
+          this.$router.push({
+            path: `/${id}/page-${value}`,
+            query: this.$route.query
+          });
+        }
       }
     }
   },
@@ -128,13 +148,19 @@ export default {
       ]
     };
   },
-  async asyncData({ $axios, params: { type, id }, query: { sort }, error }) {
+  async asyncData({
+    $axios,
+    params: { type, id, page = 1 },
+    query: { sort },
+    error
+  }) {
     try {
       const {
-        data: { title, description, blocks }
+        data: { title, description, blocks, maxPage }
       } = await $axios.get(getPath(type, id), {
         params: {
-          sort
+          sort,
+          page
         }
       });
 
@@ -145,41 +171,11 @@ export default {
             ? description.slice(0, 317) + "..."
             : description,
         blocks,
-        countPage: blocks.length
+        countPage: blocks.length,
+        maxPage
       };
     } catch ({ response }) {
       error({});
-    }
-  },
-  watch: {
-    $route() {
-      this.blocks = [];
-      if (this.$refs.infiniteLoading) {
-        this.$refs.infiniteLoading.stateChanger.reset();
-      }
-    }
-  },
-  methods: {
-    async fetch({ loaded, complete }) {
-      const {
-        data: { blocks }
-      } = await this.$axios.get(
-        getPath(this.$route.params.type, this.$route.params.id),
-        {
-          params: {
-            sort: this.$route.query.sort || "view",
-            page: 1 || ~(this.blocks.length / this.countPage)
-          }
-        }
-      );
-
-      if (blocks.length === 0) {
-        complete();
-      } else {
-        loaded();
-      }
-
-      this.blocks.push(...blocks);
     }
   }
 };

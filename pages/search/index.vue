@@ -75,17 +75,14 @@
 
     <v-col cols="12">
       <app-section-grid :hentais="hentais" :title="``">
-        <client-only>
-          <vue-infinite-loading
-            @infinite="fetch"
-            class="mt-2"
-            ref="infiniteLoading"
-          >
-            <template v-slot:spinner>
-              <v-progress-circular indeterminate small color="inherit" />
-            </template>
-          </vue-infinite-loading>
-        </client-only>
+        <div class="text-center mt-5">
+          <v-pagination
+            v-model="page"
+            :length="maxPage"
+            circle
+            :total-visible="7"
+          />
+        </div>
       </app-section-grid>
     </v-col>
   </v-row>
@@ -93,7 +90,6 @@
 
 <script>
 import AppSectionGrid from "@/components/AppSectionGrid";
-import VueInfiniteLoading from "vue-infinite-loading";
 
 function clearObject(object) {
   for (const name in object) {
@@ -105,11 +101,11 @@ function clearObject(object) {
 }
 
 export default {
+  scrollToTop: true,
+  watchQuery: ["query", "producer", "year", "type", "categories", "page"],
   components: {
-    AppSectionGrid,
-    VueInfiniteLoading
+    AppSectionGrid
   },
-
   head() {
     return {
       title: `Tìm kiếm ${this.$route.query.query}`,
@@ -162,7 +158,7 @@ export default {
         data: { categories, producer, year, type }
       },
       {
-        data: { hentais }
+        data: { hentais, maxPage }
       }
     ] = await Promise.all([
       $axios.get("/setup", {
@@ -191,8 +187,25 @@ export default {
       hxproducer: query.producer || "",
       hxyear: query.year || "",
       hxtype: query.type || "",
-      hentais
+      hentais,
+      maxPage
     };
+  },
+  computed: {
+    page: {
+      get() {
+        return Math.max(this.$route.query.page || 1, 1);
+      },
+      set(value) {
+        this.$router.push({
+          ...this.$route,
+          query: {
+            ...this.$route.query,
+            page: value
+          }
+        });
+      }
+    }
   },
   watch: {
     query() {
@@ -209,12 +222,6 @@ export default {
     },
     hxtype() {
       this.update();
-    },
-    $route() {
-      this.hentais = [];
-      if (this.$refs.infiniteLoading) {
-        this.$refs.infiniteLoading.stateChanger.reset();
-      }
     }
   },
   methods: {
@@ -233,30 +240,6 @@ export default {
           })
         });
       }, 1000);
-    },
-    async fetch({ loaded, complete }) {
-      const {
-        data: { hentais }
-      } = await this.$axios.get(`/search`, {
-        params: {
-          query: this.query,
-          producer: this.hxproducer,
-          year: this.hxyear,
-          type: this.hxtype,
-          categories: this.hxgenres,
-          page: Math.ceil(this.hentais.length / 18) + 1
-        }
-      });
-      complete()
-      return
-
-      if (hentais.length === 0) {
-        complete();
-      } else {
-        loaded();
-      }
-
-      this.hentais.push(...hentais);
     }
   }
 };

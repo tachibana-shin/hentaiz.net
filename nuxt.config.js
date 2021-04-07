@@ -18,6 +18,11 @@ export default {
         path: "/hentai/:id/tap-:chap",
         component: resolve(__dirname, "pages/hentai/_id/index")
       });
+      routes.unshift({
+        name: "_type-_id-page",
+        path: "/:type/:id?/page-:page",
+        component: resolve(__dirname, "pages/_type/_id/index")
+      });
     }
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -34,6 +39,8 @@ export default {
         content: "5jNpT323wrrczYxA70CqBKOgbI81R2V3M4LUi6cP-E8"
       }
     ],
+
+    __dangerouslyDisableSanitizers: ["script"],
     script: [
       {
         src: "https://www.googletagmanager.com/gtag/js?id=G-8R0ER79CFB",
@@ -96,6 +103,7 @@ export default {
     const sitemaps = data.map(item => {
       return {
         path: `${item.loc}.xml`,
+        lastmod: item.lastmod,
         routes: item.children.map(item => {
           return {
             url: `${process.env.BASE_URL}${item.loc}`,
@@ -104,9 +112,6 @@ export default {
         })
       };
     });
-
-
-    console.log( sitemaps );
 
     return {
       hostname: process.env.BASE_URL,
@@ -118,7 +123,9 @@ export default {
   },
 
   robots: {
-    UserAgent: "*"
+    UserAgent: "*",
+    Allow: "/",
+    Sitemap: `${process.env.BASE_URL}/sitemap.xml`
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
