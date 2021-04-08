@@ -157,7 +157,7 @@ export default {
     try {
       const {
         data: { title, description, blocks, maxPage }
-      } = await $axios.get(getPath(type, id), {
+      } = await $axios.get(encodeURI(getPath(type, id)), {
         params: {
           sort,
           page

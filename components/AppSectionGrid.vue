@@ -143,7 +143,7 @@ export default {
 
       const {
         data: { blocks }
-      } = await this.$axios.get(!!this.axios ? this.axios : this.to, {
+      } = await this.$axios.get(encodeURI(!!this.axios ? this.axios : this.to), {
         params: {
           page: this.page
         }

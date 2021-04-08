@@ -286,7 +286,7 @@ export default {
           haveYouLike,
           nameJapan
         }
-      } = await $axios.get(`/hentai/${id}`, {
+      } = await $axios.get(encodeURI(`/hentai/${id}`), {
         params: {
           chapter: chap || 1
         }
